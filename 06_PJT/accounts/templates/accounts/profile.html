@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between">
+  <div>
+    <h1 class="mb-5">{{ user.username }}님의 프로필 페이지</h1>
+  </div>
+  <div>
+    <div class="d-flex">
+      <div class="mt-1">
+        팔로잉: {{ user.followings.all|length }} / 팔로워: {{ user.followers.all|length }}
+      </div>
+      <div class="ms-3">
+        {% if request.user.is_authenticated and request.user != user %}
+          <form action="{% url 'accounts:follow' user.id %}" method='POST'>
+            {% csrf_token %}
+            {% if request.user in user.followers.all %}
+              <button type="submit" class="btn btn-light">Unfollow</button>
+            {% else %}
+              <button type="submit" class="btn btn-light">follow</button>
+            {% endif %}
+          </form>
+        {% endif%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>회원번호: {{ user.id }}</p>
+<p>유저이름: {{ user.username }}</p>
+<p>가입날짜: {{ user.date_joined }}</p>
+
+<hr>
+
+<h2 class="my-4">유저가 쓴 글</h2>
+
+{% if boards|length == 0 %}
+  <p>아직 작성한 게시글이 없습니다</p>
+{% else %}
+  {% for board in boards %}
+    <div class="rounded" style="background-color: #f3f3f3;">
+      <div class="ms-3 mb-3">
+        <p class="pt-2">글번호: {{ board.id }}</p>
+        <p class="pb-2">글제목: <a href="{% url 'boards:detail' board.id %}">{{ board.title }}</p></a>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<hr>
+
+<h2 class="my-4">유저가 쓴 댓글</h2>
+
+{% if comments|length == 0 %}
+  <p>아직 작성한 댓글 없습니다</p>
+{% else %}
+  {% for comment in comments %}
+    <div class="rounded" style="background-color: #f3f3f3;">
+      <div class="ms-3 mb-3">
+        <p class="pt-2">글제목: <a href="{% url 'boards:detail' comment.board.id %}">{{ comment.board.title }}</p></a>
+        <p class="pb-2">내용: {{ comment.content }}</p>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<hr>
+
+<h2 class="my-4">팔로워</h2>
+
+{% if followers|length == 0 %} 팔로워 한 사람이 없습니다.
+{% else %}
+  {% for follower in followers %}
+    <div class="my-2 rounded" style="background-color: #f3f3f3;">
+      <div class="py-1 d-flex justify-content-between">
+        <div>
+          <div class="ms-3 mb-3">
+            <p class="pt-2">유저: {{ follower.username }}</p>
+          </div>
+        </div>
+        <div>
+          <a href="{% url 'accounts:profile' follower.id %}"><button class="mt-1 me-2 btn btn-light">프로필 보러가기</button></a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% endblock content %}

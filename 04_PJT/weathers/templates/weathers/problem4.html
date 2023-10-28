@@ -1,0 +1,12 @@
+{% extends "weathers/base.html" %}
+
+{% comment %} 
+기상현상의 발생횟수 ("Events" 컬럼) 히스토그램
+사용되는 Events 컬럼은 "결측치"가 포함되어 있으며, 다중 값을 허용
+다중 값은 각 기상 현상의 발생 횟수에 추가하여 계산 합니다
+
+{% endcomment %}
+{% block content %}
+    <h1>문제4. 날씨 이벤트</h1>
+    <img src="{{ chart_image }}" alt="img">
+{% endblock content %}

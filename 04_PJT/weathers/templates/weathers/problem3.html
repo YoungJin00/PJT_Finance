@@ -1,0 +1,11 @@
+{% extends "weathers/base.html" %}
+
+{% comment %} 
+월별 최고, 평균, 최저 온도의 평균 선 그래프
+날짜 필드
+온도필드 > 숫자형식
+{% endcomment %}
+{% block content %}
+    <h1>문제3. 월 별 온도 비교</h1>
+    <img src="{{ chart_image }}" alt="img">
+{% endblock content %}
